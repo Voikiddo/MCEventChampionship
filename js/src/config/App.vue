@@ -1,8 +1,8 @@
 <template>
   <div class="config">
     <h1>Broadcaster Configuration</h1>
-
-    <ComingSoon v-if="showComingSoon" />
+    <h3>Hello</h3>
+    <VoteLog v-if="showComingSoon" />
   </div>
 </template>
 
@@ -14,10 +14,10 @@ import { provideMEDKit } from "@/shared/hooks/use-medkit";
 import analytics from "@/shared/analytics";
 import globals from "@/shared/globals";
 
-import ComingSoon from "@/shared/views/ComingSoon.vue";
+import VoteLog from "@/shared/views/VoteLog.vue";
 
 export default defineComponent({
-  components: { ComingSoon },
+  components: { VoteLog },
 
   setup() {
     const showComingSoon = ref(true);
@@ -26,7 +26,7 @@ export default defineComponent({
     const medkit = provideMEDKit({
       channelId: globals.TESTING_CHANNEL_ID,
       clientId: globals.CLIENT_ID,
-      role: "broadcaster",
+      role: "admin",
       uaString: globals.UA_STRING,
       userId: globals.TESTING_USER_ID,
     });

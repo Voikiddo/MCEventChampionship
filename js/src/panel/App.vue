@@ -1,7 +1,6 @@
 <template>
   <div class="panel">
     <h1>Panel Extension</h1>
-
     <ComingSoon v-if="showComingSoon" />
   </div>
 </template>

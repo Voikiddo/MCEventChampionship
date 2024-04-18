@@ -22,7 +22,7 @@ const g = {
   UA_STRING: process.env.VUE_APP_UA_STRING,
 
   TESTING_CHANNEL_ID: process.env.VUE_APP_TESTING_CHANNEL_ID,
-  TESTING_USER_ID: process.env.VUE_APP_TESTING_USER_ID,
+  TESTING_USER_ID: process.env.VUE_APP_USER_ID,
 };
 
 export default g;

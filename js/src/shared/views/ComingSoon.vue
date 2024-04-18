@@ -26,8 +26,8 @@ export default defineComponent({
       // User information is immediately available
       medkitInfo.value = JSON.stringify(
         {
-          MEDKitAvailable: true,
-          user: medkit.user,
+          MEDKitAvailable: true
+          //user: medkit.user,
         },
         undefined,
         2

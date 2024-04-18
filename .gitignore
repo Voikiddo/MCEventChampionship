@@ -2,3 +2,4 @@ package-lock.json
 js/dist/
 ts/dist/
 node_modules/
+.env
