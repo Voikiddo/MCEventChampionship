@@ -1,5 +1,5 @@
 {
-  "name": "PROJECT_NAME",
+  "name": "mc_event_championship",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@muxy/extensions-js": "^2.4.3",
+    "@vueuse/core": "^10.9.0",
     "core-js": "^3.18.3",
     "vue": "^3.0.0"
   },
