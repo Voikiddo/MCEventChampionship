@@ -2,6 +2,18 @@
   <div class="config">
     <h1>Broadcaster Configuration</h1>
 
+    <VoteResult
+      :voteTopic="voteState.topic"
+      :eventA="voteState.eventA"
+      :eventB="voteState.eventB"
+      :votesA="voteState.votesA"
+      :votesB="voteState.votesB"
+    />
+
+    <button @click="updateVoteStatus">Update Vote Status</button>
+
+    <VoteLog />
+
     <div>
       <h3>Set Vote Topic</h3>
       <label for="vote-topic">Vote for: </label>
@@ -25,21 +37,6 @@
       <br />
       <button @click="voteForTopic">Vote!</button>
     </div>
-
-    <div>
-      <h3>Update Vote Status</h3>
-      <button @click="updateVoteStatus">udpate</button>
-    </div>
-
-    <VoteResult
-      :voteTopic="voteState.topic"
-      :eventA="voteState.eventA"
-      :eventB="voteState.eventB"
-      :votesA="voteState.votesA"
-      :votesB="voteState.votesB"
-    />
-
-    <VoteLog />
   </div>
 </template>
 
@@ -75,7 +72,7 @@ const medkitLoaded = ref(false);
 const medkit = provideMEDKit({
   channelId: globals.TESTING_CHANNEL_ID,
   clientId: globals.CLIENT_ID,
-  role: "admin",
+  role: "broadcaster",
   uaString: globals.UA_STRING,
   userId: globals.TESTING_USER_ID,
 });
@@ -129,6 +126,7 @@ const voteForTopic = () => {
 
 const updateVoteStatus = () => {
   medkit.getVoteData(voteState.topic).then(voteData => {
+    console.log(voteData);
     voteState.votesA = voteData.specific ? voteData.specific[0] : 0
     voteState.votesB = voteData.specific ? voteData.specific[1] : 0
   })

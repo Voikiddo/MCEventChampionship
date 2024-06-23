@@ -1,26 +1,39 @@
 <template>
   <div class="overlay">
-    <h1>Overlay Extension</h1>
-
-    <ComingSoon v-if="showComingSoon" />
+    <div id="voteBtnDiv">
+      <button class="voteBtn" id="voteBtn1" @click="voteForTopic(0)">
+        {{ voteStatus.eventA }}
+      </button>
+      <button class="voteBtn" id="voteBtn2" @click="voteForTopic(1)">
+        {{ voteStatus.eventB }}
+      </button>
+    </div>
   </div>
 </template>
 
 <script lang="js">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, reactive } from "vue";
 
 import { provideMEDKit } from "@/shared/hooks/use-medkit";
 
 import analytics from "@/shared/analytics";
 import globals from "@/shared/globals";
 
-import ComingSoon from "@/shared/views/ComingSoon.vue";
-
 export default defineComponent({
-  components: { ComingSoon },
-
   setup() {
-    const showComingSoon = ref(true);
+    const voteStatus = reactive({
+      topic: "TBD",
+      eventA: "TBD",
+      eventB: "TBD"
+    })
+    const medkitLoaded = ref(false);
+
+    const voteForTopic = (vote) => {
+      if (!medkitLoaded.value) console.log("Please wait a bit before trying again");
+
+      console.log(`voting for ${voteStatus.topic} with ${vote}`)
+      medkit.vote(voteStatus.topic, vote);
+    }
 
     // MEDKit is initialized and provided to the Vue provide/inject system
     const medkit = provideMEDKit({
@@ -33,10 +46,19 @@ export default defineComponent({
 
     // MEDKit must fully load before it is available
     medkit.loaded().then(() => {
+      medkitLoaded.value = true
+
       if (globals.UA_STRING) {
         analytics.setMEDKit(medkit);
         analytics.startKeepAliveHeartbeat();
       }
+
+      medkit.getChannelState().then((state) => {
+        console.log(state);
+        voteStatus.eventA = state.event_A
+        voteStatus.eventB = state.event_B
+        voteStatus.topic = state.vote_topic
+      })
 
       // Certain events will be broadcast automatically in response to
       // server actions. This event is sent whenever the channel state
@@ -44,12 +66,12 @@ export default defineComponent({
       medkit.listen("channel_state_update", (newState) => {
         console.log("Channel state has been updated");
         console.log(JSON.stringify(newState));
-        showComingSoon.value = newState?.show_coming_soon || false;
       });
     });
 
     return {
-      showComingSoon,
+      voteStatus,
+      voteForTopic
     };
   },
 });
@@ -59,11 +81,28 @@ export default defineComponent({
 @import "@/shared/scss/base.scss";
 
 .overlay {
-  height: 100vh;
-  width: 33vw;
+  height: 40vh;
+  width: 100vw;
+  bottom: 0;
+  position: absolute;
 
   background-color: rgba(50, 50, 50, 0.6);
   color: white;
   padding: 1em;
+}
+
+#voteBtnDiv {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.voteBtn {
+  height: 10vh;
+  width: 20vw;
+  margin-right: 12rem;
+  font-size: 2rem;
 }
 </style>
